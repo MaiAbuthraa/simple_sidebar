@@ -1,0 +1,4 @@
+simple_sidebar:
+  class: menu
+  nodes:
+    title: test
