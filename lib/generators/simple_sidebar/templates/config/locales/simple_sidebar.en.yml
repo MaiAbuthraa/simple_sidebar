@@ -1,4 +1,5 @@
 en:
   simple_sidebar:
-    home: Home Page
+    default:
+      home: Home Page
 

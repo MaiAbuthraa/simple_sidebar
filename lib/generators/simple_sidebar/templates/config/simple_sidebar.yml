@@ -1,4 +1,48 @@
-simple_sidebar:
-  class: menu
+default:
+  style:
+    node_level_0: "menu-content"
+    node_level_1: "sub-menu-level-2"
+    node_level_2: "sub-menu-level-3"
+    active_class: active
+    nodes_tag: ul
+    node_tag: li
+    icon_tag: span
+
   nodes:
-    title: test
+    home:
+      label: home
+      path: root_path
+      icon: 'fa fa-home'
+    contacts:
+      label: contact
+      path: "/contact"
+      target: "_blank"
+      active_pattern: /^\/contact/
+    profile:
+      label: profile
+      children:
+        setting:
+          label: settings
+          children:
+            privacy:
+              label: privacy
+              path: '/privacy'
+            help:
+              label: help
+              path: '/help'
+        logout:
+          label: logout
+          path: '/logout'
+          method: :delete
+    messages:
+      label: messages
+      children:
+        inbox:
+          label: inbox
+          path: '/messages/inbox'
+        sent:
+          label: sent
+          path: '/messages/sent'
+        trash:
+          label: trash
+          path: '/messages/trash'
