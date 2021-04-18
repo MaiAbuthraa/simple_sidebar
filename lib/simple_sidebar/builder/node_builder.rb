@@ -27,12 +27,20 @@ module SimpleSidebar
 
       def link_options
         {
-          href: node[:path] || "#",
+          href: link_path,
           method: node[:method],
           target: node[:target],
           class: node[:class],
           title: label
         }.compact
+      end
+
+      def link_path
+        return "#" unless node[:path].present?
+
+        @link_path ||= eval("Rails.application.routes.url_helpers.#{node[:path]}")
+      rescue  => e
+        puts e
       end
 
       def node_options
@@ -46,7 +54,7 @@ module SimpleSidebar
           return eval(node[:active_pattern]) =~ SimpleSidebar.current_path
         end
 
-        node[:path] == SimpleSidebar.current_path
+        link_path == SimpleSidebar.current_path
       end
 
       def active_class
