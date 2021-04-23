@@ -22,10 +22,9 @@ module SimpleSidebar
 
         content_tag(nodes_tag, class: node_class_level(level)) do
           nodes.map do |_, node|
-            # if node.include?(:if)
-            # eval "Rails.application.routes.url_helpers.instance_eval{ #{node[:if]} }"
-            #  next unless url_helper.instance_eval(node.if)
-            # end
+            if node.include?(:if)
+              next unless eval "ApplicationController.helpers.#{node[:if]}"
+            end
 
             children_html = children(node, level)
             NodeBuilder.new(node, style, scope, parent).call + children_html
