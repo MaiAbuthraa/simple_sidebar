@@ -17,12 +17,18 @@ module SimpleSidebar
       attr_reader :style, :scope
 
       private
-      def build_nodes(nodes, level)
+      def build_nodes(nodes, level, parent = nil)
         level += 1
 
         content_tag(nodes_tag, class: node_class_level(level)) do
           nodes.map do |_, node|
-            NodeBuilder.new(node, style, scope).call + children(node, level)
+            # if node.include?(:if)
+            # eval "Rails.application.routes.url_helpers.instance_eval{ #{node[:if]} }"
+            #  next unless url_helper.instance_eval(node.if)
+            # end
+
+            children_html = children(node, level)
+            NodeBuilder.new(node, style, scope, parent).call + children_html
           end.reduce(&:+)
         end.html_safe
       end
@@ -34,7 +40,7 @@ module SimpleSidebar
       def children(node, level)
         return "" if node[:children].blank?
 
-        build_nodes(node[:children], level)
+        build_nodes(node[:children], level, node)
       end
 
       def nodes_tag

@@ -4,10 +4,11 @@ module SimpleSidebar
       include ActionView::Context
       include ActionView::Helpers::TranslationHelper
 
-      def initialize(node, style, scope)
+      def initialize(node, style, scope, parent)
         @node = node
         @style = style
         @scope = scope
+        @parent = parent
       end
 
       def call
@@ -16,7 +17,7 @@ module SimpleSidebar
         end
       end
 
-      attr_reader :style, :scope, :node
+      attr_reader :style, :scope, :node, :parent
 
       private
       def link
@@ -30,7 +31,7 @@ module SimpleSidebar
           href: link_path,
           method: node[:method],
           target: node[:target],
-          class: node[:class],
+          class: node[:link_class],
           title: label
         }.compact
       end
@@ -44,8 +45,32 @@ module SimpleSidebar
       end
 
       def node_options
+        node[:node_class] = node_class
+        parent_node_class
+
         {}.tap do |option|
-          option[:class] = active_class if is_active?
+          option[:class] = node[:node_class]
+
+          if is_active?
+            option[:class] << active_class
+            parent[:node_class] << active_class unless parent.nil?
+          end
+
+          option[:class].join
+        end
+      end
+
+      def node_class
+        return node[:node_class] if node[:node_class].is_a? Array
+
+        (node[:node_class] || "").split
+      end
+
+      def parent_node_class
+        return if parent.nil?
+
+        unless parent[:node_class].is_a? Array
+          parent[:node_class] = (parent[:node_class] || "").split
         end
       end
 
