@@ -29,7 +29,9 @@ module SimpleSidebar
       def link_options
         {
           href: link_path,
-          method: node[:method],
+          data: {
+            method: node[:method]
+          },
           target: node[:target],
           class: node[:link_class],
           title: label
