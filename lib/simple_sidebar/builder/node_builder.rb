@@ -33,7 +33,7 @@ module SimpleSidebar
             method: node[:method]
           },
           target: node[:target],
-          class: node[:link_class],
+          class: link_classes,
           title: label
         }.compact
       end
@@ -46,14 +46,24 @@ module SimpleSidebar
         puts e
       end
 
+      def link_classes
+        [].tap do |option|
+           option << node[:link_class]
+
+          if is_active? && style[:active_class_on] == 'link'
+            option << active_class
+          end
+        end
+      end
+
       def node_options
         node[:node_class] = node_class
         parent_node_class
 
         {}.tap do |option|
-          option[:class] = node[:node_class]
+          option[:class] = [node[:node_class]]
 
-          if is_active?
+          if is_active? && style[:active_class_on] == 'node'
             option[:class] << active_class
             parent[:node_class] << active_class unless parent.nil?
           end

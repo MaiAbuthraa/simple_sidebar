@@ -4,6 +4,7 @@ default:
     node_level_1: "sub-menu-level-2"
     node_level_2: "sub-menu-level-3"
     active_class: active
+    active_class_on: node
     nodes_tag: ul
     node_tag: li
     icon_tag: span
